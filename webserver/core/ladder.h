@@ -25,6 +25,7 @@
 
 #include <pthread.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MODBUS_PROTOCOL     0
 #define DNP3_PROTOCOL       1

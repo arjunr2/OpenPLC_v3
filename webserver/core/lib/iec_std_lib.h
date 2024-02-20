@@ -380,7 +380,7 @@ static inline TIME __time_mul(TIME IN1, LREAL IN2){
   time_t s = (time_t)s_f;
   div_t ns = div((int)((LREAL)IN1.tv_nsec * IN2), 1000000000);
   TIME res = {(long)s + ns.quot,
-		      (long)ns.rem + (s_f - s) * 1000000000 };
+		      (long)(ns.rem + (s_f - s) * 1000000000) };
   __normalize_timespec(&res);
   return res;
 }
@@ -538,7 +538,7 @@ static inline LREAL __string_to_real(STRING IN) {
     /*   TO_TIME   */
     /***************/
 static inline TIME    __int_to_time(LINT IN)  {return (TIME){IN, 0};}
-static inline TIME   __real_to_time(LREAL IN) {return (TIME){IN, (IN - (LINT)IN) * 1000000000};}
+static inline TIME   __real_to_time(LREAL IN) {return (TIME){(long)IN, (long)((IN - (LINT)IN) * 1000000000)};}
 static inline TIME __string_to_time(STRING IN){
     __strlen_t l;
     /* TODO :
@@ -585,7 +585,7 @@ static inline STRING __time_to_string(TIME IN){
     div_t days;
     /*t#5d14h12m18s3.5ms*/
     res = __INIT_STRING;
-    days = div((int &)IN.tv_sec, SECONDS_PER_DAY);
+    days = div((int)IN.tv_sec, SECONDS_PER_DAY);
     if(!days.rem && IN.tv_nsec == 0){
         res.len = snprintf((char*)&res.body, STR_MAX_LEN, "T#%dd", days.quot);
     }else{

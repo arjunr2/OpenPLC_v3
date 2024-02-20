@@ -964,7 +964,7 @@ class generate_c_pous_c {
         s4o.print("// FUNCTION_BLOCK ");
         symbol->fblock_name->accept(print_base);
         s4o.print("\n// Data part\n");
-        s4o.print("typedef struct {\n");
+        s4o.print("typedef struct __attribute__((packed)) {\n");
         s4o.indent_right();
 
         /* (A.2) Public variables: i.e. the function parameters... */
@@ -1175,7 +1175,7 @@ class generate_c_pous_c {
         s4o.print("// PROGRAM ");
         symbol->program_type_name->accept(print_base);
         s4o.print("\n// Data part\n");
-        s4o.print("typedef struct {\n");
+        s4o.print("typedef struct __attribute__((packed)) {\n");
         s4o.indent_right();
       
         /* (A.2) Public variables: i.e. the program parameters... */

@@ -105,6 +105,13 @@ function install_matiec {
     cp ./iec2c "$OPENPLC_DIR/webserver/" || fail "Error compiling MatIEC"
     cd "$OPENPLC_DIR"
 }
+function reinstall_matiec {
+    echo "[MATIEC COMPILER]"
+    cd "$OPENPLC_DIR/utils/matiec_src"
+    make
+    cp ./iec2c "$OPENPLC_DIR/webserver/" || fail "Error compiling MatIEC"
+    cd "$OPENPLC_DIR"
+}
 
 function install_st_optimizer {
     echo "[ST OPTIMIZER]"
@@ -281,12 +288,16 @@ elif [ "$1" == "docker" ]; then
 
 elif [ "$1" == "rpi" ]; then
     echo "Installing OpenPLC on Raspberry Pi"
-    linux_install_deps sudo
-    install_wiringpi
-    install_py_deps
-    install_all_libs sudo
-    install_systemd_service sudo
-    finalize_install linux
+    if [ "$2" == "reinstall" ]; then
+	reinstall_matiec sudo
+    else
+	    linux_install_deps sudo
+	    install_wiringpi
+	    install_py_deps
+	    install_all_libs sudo
+	    install_systemd_service sudo
+	    finalize_install linux
+    fi
 
 elif [ "$1" == "neuron" ]; then
     echo "Installing OpenPLC on UniPi Neuron PLC"
